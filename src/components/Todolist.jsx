@@ -28,7 +28,6 @@ const Todolist = () => {
     localTodoList === null ? [] : localTodoList
   );
   const [todo, setTodo] = useState("");
-  console.log(todoList);
 
   // const todoTasks = todoList.filter((each) => each.completed === false);
   // const doneTasks = todoList.filter((each) => each.completed === true);
@@ -50,10 +49,8 @@ const Todolist = () => {
   }, []);
 
   const deleteTodo = (id) => {
-    console.log("todo deleted");
     const filteredList = todoList.filter((each) => each.id !== id);
     localStorage.setItem("todolist", JSON.stringify(filteredList));
-    console.log("todo deleted");
     setTodoList(filteredList);
   };
 
@@ -99,7 +96,6 @@ const Todolist = () => {
   };
 
   const onChangeStatus = (id) => {
-    console.log("on change");
     const updatedTodoList = todoList.map((each) => {
       if (each.id === id) {
         let { completed } = each;
