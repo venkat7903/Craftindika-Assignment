@@ -1,9 +1,9 @@
 /* eslint-disable no-useless-concat */
 import React from "react";
 
-import { FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa"; // Icon to delete todo
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { CSS } from "@dnd-kit/utilities"; // Imported CSS for dnd toolkit
 
 const TodoItem = (props) => {
   const { todoDetails, deleteTodo, onChangeStatus } = props;

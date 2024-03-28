@@ -10,7 +10,7 @@ import {
   closestCorners,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from "@dnd-kit/core"; // Used dnd-kit/core toolkit for drag and drop
 import {
   SortableContext,
   arrayMove,
@@ -18,52 +18,51 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import TodoItem from "./TodoItem/TodoItem";
+import TodoItem from "./TodoItem/TodoItem"; // Imported TodoItem to represent each todo item
 
-let localTodoList = localStorage.getItem("todolist");
-localTodoList = JSON.parse(localTodoList);
+let localTodoList = localStorage.getItem("todolist"); // The todos are being accessed from local storage
+localTodoList = JSON.parse(localTodoList); // Obtained todos are parsed into their respective data types
 
 const Todolist = () => {
   const [todoList, setTodoList] = useState(
-    localTodoList === null ? [] : localTodoList
+    localTodoList === null ? [] : localTodoList // If the todoList in local storage is null then initialized with empty array
   );
-  const [todo, setTodo] = useState("");
-
-  // const todoTasks = todoList.filter((each) => each.completed === false);
-  // const doneTasks = todoList.filter((each) => each.completed === true);
+  const [todo, setTodo] = useState(""); // Initialized an empty todo title
 
   useEffect(() => {
     const getTodos = async () => {
-      const url = "https://jsonplaceholder.typicode.com/todos";
-      const response = await fetch(url);
+      const url = "https://jsonplaceholder.typicode.com/todos"; //JSonPlaceholder API
+      const response = await fetch(url); // get todos through fetch call
       const data = await response.json();
       if (response.ok === true) {
         if (localTodoList === null) {
           const updatedTodoList = [...data.slice(0, 8), ...todoList];
-          localStorage.setItem("todolist", JSON.stringify(updatedTodoList));
-          setTodoList(updatedTodoList);
+          localStorage.setItem("todolist", JSON.stringify(updatedTodoList)); // Updating the todoList in local storage with todos obtained from API
+          setTodoList(updatedTodoList); // Updated the state with updatedTodosList
         }
       }
     };
     getTodos();
-  }, []);
+  }, []); // Using empty dependency array to execute the effect callback function only once after the initial component render
 
   const deleteTodo = (id) => {
+    // Function to delete the todoItem using Id as parameter
     const filteredList = todoList.filter((each) => each.id !== id);
     localStorage.setItem("todolist", JSON.stringify(filteredList));
     setTodoList(filteredList);
   };
 
   const onAddTodo = (event) => {
-    event.preventDefault();
+    // Function to add todo in todoList
+    event.preventDefault(); // method to prevent default behaviour of browser
 
     if (todo === "") {
-      alert("Enter a task");
+      alert("Enter a task"); // Made alert if the user input is empty
       return;
     }
 
     const newTodo = {
-      id: uuidv4(),
+      id: uuidv4(), // uuidv4() returns a unique id everytime it is called
       title: todo,
       completed: false,
     };
@@ -73,9 +72,11 @@ const Todolist = () => {
     setTodo("");
   };
 
-  const getTodoPosition = (id) => todoList.findIndex((todo) => todo.id === id);
+  const getTodoPosition = (id) => todoList.findIndex((todo) => todo.id === id); // Function to obtain the index of the todoItem in toodList
 
   const handleDragEnd = (event) => {
+    // This function handles the drag event
+
     const { active, over } = event;
 
     if (active.id === over.id) return;
@@ -96,6 +97,7 @@ const Todolist = () => {
   };
 
   const onChangeStatus = (id) => {
+    // Function to change the status of todo whether todo or done
     const updatedTodoList = todoList.map((each) => {
       if (each.id === id) {
         let { completed } = each;
@@ -109,6 +111,7 @@ const Todolist = () => {
   };
 
   const sensors = useSensors(
+    // Allowing application to work using touch, pointer, keyboard
     useSensor(PointerSensor, {
       activationConstraint: { distance: 1 },
     }),
@@ -131,6 +134,8 @@ const Todolist = () => {
           >
             TO-DO List
           </h1>
+
+          {/* todo logo */}
           <img
             src="https://res.cloudinary.com/duyhbrsgi/image/upload/v1690024974/icon_1_qthvd3.png"
             alt="todo"
@@ -138,6 +143,8 @@ const Todolist = () => {
           />
         </div>
         <form className="w-[90%] max-w-[700px] mb-[15px]" onSubmit={onAddTodo}>
+          {" "}
+          {/* form container to use input elements and to receive inputs from user */}
           <div className="bg-gray-200 h-[60px] flex justify-between rounded-[30px] pl-[25px]">
             <input
               type="text"
@@ -156,6 +163,7 @@ const Todolist = () => {
           onDragEnd={handleDragEnd}
           collisionDetection={closestCorners}
         >
+          {/* Drag and drop is implemented only inside the Dnd Context */}
           <div className="w-[90%] mt-[20px] grid grid-cols md:grid-cols-2">
             <div className="md:mr-[20px] mb-[30px]">
               <h1 className="mb-[15px] hover:-translate-y-1/4 duration-300 font-signature font-bold text-3xl bg-red-500 text-white rounded-md py-[10px] pl-[15px] md:text-center">
@@ -165,7 +173,9 @@ const Todolist = () => {
                 items={todoList}
                 strategy={verticalListSortingStrategy}
               >
+                {/* Used SortedContext to reorder the todos*/}
                 {todoList.map((each) => {
+                  // Render the tasks who status is not completed
                   const { id, completed } = each;
                   if (completed === false) {
                     return (
@@ -189,6 +199,7 @@ const Todolist = () => {
                 items={todoList}
                 strategy={verticalListSortingStrategy}
               >
+                {/* Render the tasks who status is completed */}
                 {todoList.map((each) => {
                   const { id, completed } = each;
                   if (completed === true) {
