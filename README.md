@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-# Steps To setup Project
+# Steps to setup project
 Clone this repo in your **IDE** using commad **git clone** https://github.com/venkat7903/Craftindika-Assignment.git
 
 First run **npm install** to install necessary dependencies in package.json file.
